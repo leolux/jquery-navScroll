@@ -73,7 +73,9 @@
         if (target !== undefined) {
           e.preventDefault();
           targetOffset = $('#' + target).offset();
-          targetTop = targetOffset.top;
+		  if(targetOffset !== undefined){
+			targetTop = targetOffset.top;
+		  }          
         }
 
         if ($(this).data('scrolltime') !== undefined) {
