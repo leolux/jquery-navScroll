@@ -101,7 +101,7 @@
 
         navItem.each(function() {
           var scrollItemId = $(this).attr('href');
-          if (scrollItemId.charAt(0) === '#') {
+          if (scrollItemId !== undefined && scrollItemId.charAt(0) === '#') {
             scrollItems.push($(scrollItemId));
           }
         });
