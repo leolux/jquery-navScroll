@@ -1,6 +1,6 @@
 /*!
  * NavScroll.js
- * Version: 1.3.1
+ * Version: 1.4.0
  * Author: Jeroen Hammann
  *
  * Copyright (c) 2014 Jeroen Hammann
@@ -34,7 +34,10 @@
 
   function NavScroll(element, options) {
     this.element = element;
-    this.options = $.extend({}, defaults, options);
+    this.options = $.extend({
+      onScrollStart: function() {},
+      onScrollEnd: function() {}
+    }, defaults, options);
 
     this._defaults = defaults;
     this._name = pluginName;
@@ -72,7 +75,7 @@
 
         if (target !== undefined) {
           e.preventDefault();
-          targetOffset = $('#' + target).offset();
+		  targetOffset = $('#' + target).offset();
 		  if(targetOffset !== undefined){
 			targetTop = targetOffset.top;
 		  }          
@@ -94,7 +97,11 @@
 
         $('html, body').stop().animate({
           scrollTop: targetTop - navOffset
-        }, scrollTime);
+        }, scrollTime).promise().done(function() {
+          options.onScrollEnd.call(this);
+        });
+
+        options.onScrollStart.call(this);
       });
 
       if (options.scrollSpy) {
@@ -103,7 +110,7 @@
 
         navItem.each(function() {
           var scrollItemId = $(this).attr('href');
-          if (scrollItemId !== undefined && scrollItemId.charAt(0) === '#') {
+          if (scrollItemId.charAt(0) === '#') {
             scrollItems.push($(scrollItemId));
           }
         });
@@ -123,7 +130,7 @@
 
       for (i = 0; l > i; i++) {
         var item = scrollItems[i];
-        if (item !== undefined && item.offset() !== undefined) {
+        if (item !== undefined) {
           if (scrollPos > (item.offset().top - changeBounds)) {
             if (options.activeParent) {
               navItem.parent().removeClass(options.activeClassName);
