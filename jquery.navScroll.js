@@ -130,7 +130,7 @@
 
       for (i = 0; l > i; i++) {
         var item = scrollItems[i];
-        if (item !== undefined) {
+        if (item !== undefined && item.offset() !== undefined) {
           if (scrollPos > (item.offset().top - changeBounds)) {
             if (options.activeParent) {
               navItem.parent().removeClass(options.activeClassName);
